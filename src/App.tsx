@@ -1,57 +1,50 @@
-import React from 'react';
-import TodosContext from "./context";
-import TodoList from './todo/TodoList';
-import AddTodo from "./todo/AddTodo";
-import {ITodo} from "./interfaces/todos.interface";
+import React, {useState} from 'react';
+import {NavBar} from "./ui-elements/Navbar";
+import {TodoForm} from "./components/TodoForm";
+import {TodosList} from "./components/TodosList";
+import {ITodo} from "./interfaces/todos";
+import {Container} from "reactstrap";
 
-function App() {
+const App: React.FC = () => {
+    const [todosList, setTodosList] = useState<ITodo[]>([]);
 
-    const [todosList, setTodosList] = React.useState<ITodo[]>([
-        {id: 1, isCompleted: false, title: 'Buy potato'},
-        {id: 2, isCompleted: true, title: 'Buy bread'},
-        {id: 3, isCompleted: false, title: 'Buy milk'}
-    ]);
+    const addHandler = (title: string) => {
+        const newTodo: ITodo = {
+            id: Date.now(),
+            title: title,
+            isCompleted: false
+        };
+        setTodosList(prevState => [newTodo, ...prevState])
+    };
 
-
-    function changeTodoState(todoId: number) {
-        const updatedList = todosList.map(todo => {
+    const toggleHandler = (todoId: number) => {
+        setTodosList(prevState => prevState.map(todo => {
             if (todo.id === todoId) {
                 todo.isCompleted = !todo.isCompleted
             }
             return todo
-        });
-
-        setTodosList(updatedList);
-    }
-
-    function addTodo(title: string) {
-        setTodosList(todosList.concat({
-            id: Date.now(),
-            isCompleted: false,
-            title
         }))
-    }
+    };
 
-    function removeTodo(todoId: number) {
-        const filteredList = todosList.filter(todo => todo.id !== todoId);
-        setTodosList(filteredList)
-    }
+    const removeHandler = (todoId: number) => {
+        const shouldRemove: boolean = window.confirm('Are you sure?');
+        if (shouldRemove) {
+            setTodosList(prevState => prevState.filter(todo => todo.id !== todoId))
+        }
+    };
 
     return (
-        <TodosContext.Provider value={{ removeTodo }}>
-            <div className='wrapper'>
-                <h1>React todos</h1>
-                <AddTodo onCreate={addTodo}/>
-                {
-                    todosList.length ?
-                        <TodoList todos={todosList} onToggle={changeTodoState}/> :
-                        <p>Todos list is empty!</p>
-                }
-
-            </div>
-        </TodosContext.Provider>
-
+        <>
+            <NavBar/>
+            <Container>
+                <TodoForm onAdd={addHandler}/>
+                <TodosList todosList={todosList}
+                           onToggle={toggleHandler}
+                           onRemove={removeHandler}
+                />
+            </Container>
+        </>
     )
-}
+};
 
 export default App;
