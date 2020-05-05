@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {Collapse, Container, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from "reactstrap";
+import {NavLink as ReactNavLink} from 'react-router-dom'
 
 export const NavBar: React.FC = () => {
 
@@ -16,12 +17,16 @@ export const NavBar: React.FC = () => {
                 <NavbarToggler onClick={toggle}/>
                 <Collapse isOpen={isOpen} navbar>
                     <Nav className="mr-auto" navbar>
-                        <NavItem>
-                            <NavLink href="/">Home</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="/">Todos</NavLink>
-                        </NavItem>
+                        <NavLink>
+                            <NavItem>
+                                <ReactNavLink to="/">Home</ReactNavLink>
+                            </NavItem>
+                        </NavLink>
+                        <NavLink>
+                            <NavItem>
+                                <ReactNavLink to="/todos">Todos</ReactNavLink>
+                            </NavItem>
+                        </NavLink>
                     </Nav>
                 </Collapse>
             </Container>
