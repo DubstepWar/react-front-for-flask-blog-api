@@ -1,6 +1,7 @@
 import React from "react";
 import {ITodo} from "../interfaces/todos";
 import {Alert, Col, Input, ListGroup, ListGroupItem, Row} from 'reactstrap';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 interface TodosListProps {
     todosList: ITodo[]
@@ -48,11 +49,10 @@ export const TodosList: React.FC<TodosListProps> = ({todosList, onRemove, onTogg
                                 </span>
                             </Col>
                             <Col md={1}>
-                                <span className="remove-btn"
-                                      onClick={event => removeHandler(event, todo.id)}
-                                >
-                                    &times;
-                                </span>
+                                <FontAwesomeIcon icon="trash"
+                                                 className="text-danger"
+                                                 onClick={event => removeHandler(event, todo.id)}
+                                />
                             </Col>
                         </Row>
                     </ListGroupItem>
